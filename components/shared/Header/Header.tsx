@@ -24,7 +24,6 @@ import {
   NavigationItem,
   NavItemContentProps,
   NavLinkProps,
-  SubItem,
 } from "./header.types";
 import Link from "next/link";
 
@@ -106,7 +105,7 @@ const NavLink: React.FC<NavLinkProps> = ({
             exit={{ opacity: 0, y: 10 }}
             className="absolute left-0 mt-2 w-48 bg-white dark:bg-gray-900 rounded-md shadow-lg py-1 z-50"
           >
-            {children.props.subItems.map((subItem: SubItem) => (
+            {children.props.subItems.map((subItem) => (
               <a
                 key={subItem.name}
                 href={subItem.href}
@@ -202,6 +201,7 @@ export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -264,18 +264,50 @@ export function Header() {
             <IconButton icon={User} label="Account" />
           </div>
 
-          <button
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="md:hidden p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-          >
-            {isMenuOpen ? (
-              <X className="h-6 w-6 text-gray-600 dark:text-gray-300" />
-            ) : (
-              <Menu className="h-6 w-6 text-gray-600 dark:text-gray-300" />
-            )}
-          </button>
+          <div className="flex md:hidden items-center space-x-2">
+            <button
+              title="search"
+              onClick={() => setIsSearchOpen(!isSearchOpen)}
+              className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+            >
+              <Search className="h-6 w-6 text-gray-600 dark:text-gray-300" />
+            </button>
+            <button
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+            >
+              {isMenuOpen ? (
+                <X className="h-6 w-6 text-gray-600 dark:text-gray-300" />
+              ) : (
+                <Menu className="h-6 w-6 text-gray-600 dark:text-gray-300" />
+              )}
+            </button>
+          </div>
         </div>
       </div>
+
+      <AnimatePresence>
+        {isSearchOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="md:hidden border-t border-gray-200 dark:border-gray-800"
+          >
+            <div className="p-4">
+              <div className="relative">
+                <input
+                  type="text"
+                  placeholder="Search products..."
+                  className="w-full px-4 py-2 text-sm rounded-full border-none dark:text-white bg-gray-100 dark:bg-gray-800 
+                  focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white transition-all"
+                />
+                <Search className="absolute right-3 top-2.5 h-4 w-4 text-gray-400" />
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <AnimatePresence>
         {isMenuOpen && (
@@ -284,29 +316,30 @@ export function Header() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.2 }}
-            className="md:hidden absolute w-full bg-white dark:bg-gray-900 shadow-lg"
+            className="md:hidden fixed top-16 left-0 right-0 bottom-0 bg-white dark:bg-gray-900 overflow-y-auto"
           >
-            <MobileNavItem icon={Home} label="Home" onClick={() => {}} />
-            {navigationItems.map((item) => (
+            <div className="pb-32">
+              <MobileNavItem icon={Home} label="Home" onClick={() => {}} />
+              {navigationItems.map((item) => (
+                <MobileNavItem
+                  key={item.name}
+                  icon={ChevronRight}
+                  label={item.name}
+                  subItems={item.subItems}
+                />
+              ))}
+              <MobileNavItem icon={Heart} label="Wishlist" badge={2} />
+              <MobileNavItem icon={ShoppingBag} label="Cart" badge={3} />
+              <MobileNavItem icon={Bell} label="Notifications" badge={1} />
               <MobileNavItem
-                key={item.name}
-                icon={ChevronRight}
-                label={item.name}
-                subItems={item.subItems}
+                icon={isDarkMode ? Sun : Moon}
+                label="Theme"
+                onClick={() => setIsDarkMode(!isDarkMode)}
               />
-            ))}
-            <MobileNavItem icon={Search} label="Search" />
-            <MobileNavItem icon={Heart} label="Wishlist" badge={2} />
-            <MobileNavItem icon={ShoppingBag} label="Cart" badge={3} />
-            <MobileNavItem icon={Bell} label="Notifications" badge={1} />
-            <MobileNavItem
-              icon={isDarkMode ? Sun : Moon}
-              label="Theme"
-              onClick={() => setIsDarkMode(!isDarkMode)}
-            />
-            <MobileNavItem icon={Settings} label="Settings" />
-            <MobileNavItem icon={HelpCircle} label="Help Center" />
-            <MobileNavItem icon={LogOut} label="Sign Out" />
+              <MobileNavItem icon={Settings} label="Settings" />
+              <MobileNavItem icon={HelpCircle} label="Help Center" />
+              <MobileNavItem icon={LogOut} label="Sign Out" />
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
