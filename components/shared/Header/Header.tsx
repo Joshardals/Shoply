@@ -202,7 +202,6 @@ export function Header() {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -234,12 +233,6 @@ export function Header() {
       document.body.style.overflow = "unset";
     }
   }, [isMenuOpen]);
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Handle search logic here
-    console.log("Searching for:", searchQuery);
-  };
 
 
   return (
