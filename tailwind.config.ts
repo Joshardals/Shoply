@@ -9,10 +9,11 @@ export default {
   theme: {
     extend: {
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        example: "#example", // this is an example of how to add custom colors in tailwind.
       },
     },
   },
+
+  darkMode: "selector",
   plugins: [],
 } satisfies Config;
