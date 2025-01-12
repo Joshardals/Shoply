@@ -202,6 +202,7 @@ export function Header() {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -212,10 +213,83 @@ export function Header() {
   useEffect(() => {
     if (isDarkMode) {
       document.documentElement.classList.add("dark");
+      // Update meta theme-color for dark mode
+      document
+        .querySelector('meta[name="theme-color"]')
+        ?.setAttribute("content", "#111827"); // gray-900
     } else {
       document.documentElement.classList.remove("dark");
+      // Update meta theme-color for light mode
+      document
+        .querySelector('meta[name="theme-color"]')
+        ?.setAttribute("content", "#ffffff");
     }
   }, [isDarkMode]);
+
+  // Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+  }, [isMenuOpen]);
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Handle search logic here
+    console.log("Searching for:", searchQuery);
+  };
+
+  const MobileSearch = () => (
+    <motion.div
+      initial={{ opacity: 0, height: 0 }}
+      animate={{ opacity: 1, height: "auto" }}
+      exit={{ opacity: 0, height: 0 }}
+      className="md:hidden border-t border-gray-200 dark:border-gray-800"
+    >
+      <form onSubmit={handleSearch} className="p-4">
+        <div className="relative flex items-center">
+          <input
+            type="search"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search products..."
+            className="w-full px-4 py-3 text-base rounded-full border-none dark:text-white bg-gray-100 dark:bg-gray-800 
+            focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white transition-all"
+          />
+          <button
+            title="submit search"
+            type="submit"
+            className="absolute right-2 p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+          >
+            <Search className="h-5 w-5 text-gray-600 dark:text-gray-300" />
+          </button>
+        </div>
+      </form>
+    </motion.div>
+  );
+
+  // Modified desktop search section:
+  const DesktopSearch = () => (
+    <form onSubmit={handleSearch} className="relative group">
+      <input
+        type="search"
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        placeholder="Search"
+        className="w-40 focus:w-60 px-4 py-2 text-sm rounded-full border-none dark:text-white bg-gray-100 dark:bg-gray-800 
+        focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white transition-all"
+      />
+      <button
+        title="submit search"
+        type="submit"
+        className="absolute right-2 top-1/2 transform -translate-y-1/2"
+      >
+        <Search className="h-4 w-4 text-gray-400" />
+      </button>
+    </form>
+  );
 
   return (
     <header
