@@ -26,6 +26,7 @@ import {
   NavLinkProps,
   SubItem,
 } from "./header.types";
+import Link from "next/link";
 
 const navigationItems: NavigationItem[] = [
   {
@@ -226,13 +227,13 @@ export function Header() {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          <a href="/" className="flex-shrink-0 group">
+          <Link href="/" className="flex-shrink-0 group">
             <h1 className="text-2xl font-bold tracking-tight">
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-violet-500">
                 shoply
               </span>
             </h1>
-          </a>
+          </Link>
 
           <nav className="hidden md:flex items-center space-x-8">
             {navigationItems.map((item) => (
