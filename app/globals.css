@@ -2,6 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --theme-transition-duration: 300ms;
+}
+
 body {
-  font-family:  sans-serif;
+  font-family: sans-serif;
+}
+
+.theme-transition,
+.theme-transition *,
+.theme-transition *:before,
+.theme-transition *:after {
+  transition: all var(--theme-transition-duration) ease-out !important;
+  transition-property: background-color, border-color, color, fill, stroke !important;
 }

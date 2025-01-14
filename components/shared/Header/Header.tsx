@@ -111,7 +111,7 @@ const NavLink: React.FC<NavLinkProps> = ({
                 href={subItem.href}
                 className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
               >
-                {subItem.name}
+                {subItem.name}  
               </a>
             ))}
           </motion.div>
@@ -210,19 +210,28 @@ export function Header() {
   }, []);
 
   useEffect(() => {
+    // Add a small timeout to ensure smooth transition
     if (isDarkMode) {
+      // Apply a transition class before changing the theme
+      document.documentElement.classList.add("theme-transition");
       document.documentElement.classList.add("dark");
-      // Update meta theme-color for dark mode
       document
         .querySelector('meta[name="theme-color"]')
-        ?.setAttribute("content", "#111827"); // gray-900
+        ?.setAttribute("content", "#111827");
     } else {
+      document.documentElement.classList.add("theme-transition");
       document.documentElement.classList.remove("dark");
-      // Update meta theme-color for light mode
       document
         .querySelector('meta[name="theme-color"]')
         ?.setAttribute("content", "#ffffff");
     }
+
+    // Remove the transition class after the transition is complete
+    const timeoutId = setTimeout(() => {
+      document.documentElement.classList.remove("theme-transition");
+    }, 300); // Match this with your transition duration
+
+    return () => clearTimeout(timeoutId);
   }, [isDarkMode]);
 
   // Prevent body scroll when mobile menu is open
@@ -233,7 +242,6 @@ export function Header() {
       document.body.style.overflow = "unset";
     }
   }, [isMenuOpen]);
-
 
   return (
     <header
