@@ -213,7 +213,7 @@ export function Header() {
     // Add a small timeout to ensure smooth transition
     if (isDarkMode) {
       // Apply a transition class before changing the theme
-      document.documentElement.classList.add("theme-transition");
+      document.documentElement.classList.add("theme-transition"); 
       document.documentElement.classList.add("dark");
       document
         .querySelector('meta[name="theme-color"]')
