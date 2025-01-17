@@ -209,7 +209,7 @@ export function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  useEffect(() => {
+  useEffect(() => {   
     // Add a small timeout to ensure smooth transition
     if (isDarkMode) {
       // Apply a transition class before changing the theme
